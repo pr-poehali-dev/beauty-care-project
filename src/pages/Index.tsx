@@ -1,9 +1,46 @@
 import { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 import Icon from '@/components/ui/icon';
 
 const Index = () => {
   const [activeSection, setActiveSection] = useState('hero');
+  
+  const [trackerData, setTrackerData] = useState({
+    morning: {
+      water: false,
+      skincare: false,
+      exercise: false,
+      breakfast: false
+    },
+    day: {
+      water: false,
+      lunch: false,
+      posture: false
+    },
+    evening: {
+      water: false,
+      skincare: false,
+      makeup: false,
+      dinner: false
+    }
+  });
+
+  const toggleTask = (period: 'morning' | 'day' | 'evening', task: string) => {
+    setTrackerData(prev => ({
+      ...prev,
+      [period]: {
+        ...prev[period],
+        [task]: !prev[period][task as keyof typeof prev.morning]
+      }
+    }));
+  };
+
+  const getProgress = (period: 'morning' | 'day' | 'evening') => {
+    const tasks = Object.values(trackerData[period]);
+    const completed = tasks.filter(Boolean).length;
+    return Math.round((completed / tasks.length) * 100);
+  };
 
   const faceExercises = [
     {
@@ -326,6 +363,234 @@ const Index = () => {
                 </ul>
               </div>
             </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tracker" className="container mx-auto px-4 py-20 mb-20">
+        <div className="max-w-6xl mx-auto">
+          <div className="text-center mb-12">
+            <div className="flex items-center justify-center gap-3 mb-4">
+              <Icon name="ClipboardCheck" size={36} className="text-primary-foreground" />
+              <h3 className="text-4xl font-bold text-primary-foreground">Трекер ухода</h3>
+            </div>
+            <p className="text-xl text-muted-foreground">
+              Организуйте свой день: отмечайте выполненные задачи и следите за прогрессом
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            <Card className="border-none shadow-lg bg-gradient-to-br from-primary/10 to-primary/5 animate-fade-in">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-primary p-2 rounded-lg">
+                      <Icon name="Sunrise" size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-primary-foreground">Утро</h4>
+                      <p className="text-sm text-muted-foreground">6:00 - 12:00</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-primary-foreground">{getProgress('morning')}%</div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.morning.water}
+                      onCheckedChange={() => toggleTask('morning', 'water')}
+                      id="morning-water"
+                    />
+                    <label htmlFor="morning-water" className="flex-1 cursor-pointer text-foreground">
+                      Выпить стакан воды
+                    </label>
+                    <Icon name="Droplet" size={18} className="text-primary-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.morning.skincare}
+                      onCheckedChange={() => toggleTask('morning', 'skincare')}
+                      id="morning-skincare"
+                    />
+                    <label htmlFor="morning-skincare" className="flex-1 cursor-pointer text-foreground">
+                      Утренний уход за кожей
+                    </label>
+                    <Icon name="Sparkles" size={18} className="text-primary-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.morning.exercise}
+                      onCheckedChange={() => toggleTask('morning', 'exercise')}
+                      id="morning-exercise"
+                    />
+                    <label htmlFor="morning-exercise" className="flex-1 cursor-pointer text-foreground">
+                      Упражнения для лица
+                    </label>
+                    <Icon name="Smile" size={18} className="text-primary-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.morning.breakfast}
+                      onCheckedChange={() => toggleTask('morning', 'breakfast')}
+                      id="morning-breakfast"
+                    />
+                    <label htmlFor="morning-breakfast" className="flex-1 cursor-pointer text-foreground">
+                      Полезный завтрак
+                    </label>
+                    <Icon name="Coffee" size={18} className="text-primary-foreground" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-lg bg-gradient-to-br from-secondary/10 to-secondary/5 animate-fade-in" style={{ animationDelay: '0.1s' }}>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-secondary p-2 rounded-lg">
+                      <Icon name="Sun" size={24} className="text-white" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-secondary-foreground">День</h4>
+                      <p className="text-sm text-muted-foreground">12:00 - 18:00</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-secondary-foreground">{getProgress('day')}%</div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.day.water}
+                      onCheckedChange={() => toggleTask('day', 'water')}
+                      id="day-water"
+                    />
+                    <label htmlFor="day-water" className="flex-1 cursor-pointer text-foreground">
+                      Пить воду регулярно
+                    </label>
+                    <Icon name="Droplet" size={18} className="text-secondary-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.day.lunch}
+                      onCheckedChange={() => toggleTask('day', 'lunch')}
+                      id="day-lunch"
+                    />
+                    <label htmlFor="day-lunch" className="flex-1 cursor-pointer text-foreground">
+                      Сбалансированный обед
+                    </label>
+                    <Icon name="UtensilsCrossed" size={18} className="text-secondary-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.day.posture}
+                      onCheckedChange={() => toggleTask('day', 'posture')}
+                      id="day-posture"
+                    />
+                    <label htmlFor="day-posture" className="flex-1 cursor-pointer text-foreground">
+                      Следить за осанкой
+                    </label>
+                    <Icon name="User" size={18} className="text-secondary-foreground" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card className="border-none shadow-lg bg-gradient-to-br from-accent/20 to-accent/10 animate-fade-in" style={{ animationDelay: '0.2s' }}>
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-6">
+                  <div className="flex items-center gap-3">
+                    <div className="bg-accent p-2 rounded-lg">
+                      <Icon name="Moon" size={24} className="text-accent-foreground" />
+                    </div>
+                    <div>
+                      <h4 className="text-xl font-bold text-accent-foreground">Вечер</h4>
+                      <p className="text-sm text-muted-foreground">18:00 - 22:00</p>
+                    </div>
+                  </div>
+                  <div className="text-right">
+                    <div className="text-2xl font-bold text-accent-foreground">{getProgress('evening')}%</div>
+                  </div>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.evening.water}
+                      onCheckedChange={() => toggleTask('evening', 'water')}
+                      id="evening-water"
+                    />
+                    <label htmlFor="evening-water" className="flex-1 cursor-pointer text-foreground">
+                      Выпить воду
+                    </label>
+                    <Icon name="Droplet" size={18} className="text-accent-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.evening.skincare}
+                      onCheckedChange={() => toggleTask('evening', 'skincare')}
+                      id="evening-skincare"
+                    />
+                    <label htmlFor="evening-skincare" className="flex-1 cursor-pointer text-foreground">
+                      Вечерний уход
+                    </label>
+                    <Icon name="Sparkles" size={18} className="text-accent-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.evening.makeup}
+                      onCheckedChange={() => toggleTask('evening', 'makeup')}
+                      id="evening-makeup"
+                    />
+                    <label htmlFor="evening-makeup" className="flex-1 cursor-pointer text-foreground">
+                      Снять макияж
+                    </label>
+                    <Icon name="Eraser" size={18} className="text-accent-foreground" />
+                  </div>
+
+                  <div className="flex items-center gap-3 p-3 bg-white rounded-lg hover:shadow-md transition-shadow">
+                    <Checkbox 
+                      checked={trackerData.evening.dinner}
+                      onCheckedChange={() => toggleTask('evening', 'dinner')}
+                      id="evening-dinner"
+                    />
+                    <label htmlFor="evening-dinner" className="flex-1 cursor-pointer text-foreground">
+                      Лёгкий ужин
+                    </label>
+                    <Icon name="Moon" size={18} className="text-accent-foreground" />
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          <div className="mt-8 text-center">
+            <Card className="border-none shadow-lg bg-gradient-to-r from-primary/10 via-secondary/10 to-accent/10 inline-block">
+              <CardContent className="p-6 px-12">
+                <div className="flex items-center gap-4">
+                  <Icon name="Trophy" size={32} className="text-primary-foreground" />
+                  <div className="text-left">
+                    <div className="text-sm text-muted-foreground">Общий прогресс дня</div>
+                    <div className="text-3xl font-bold text-primary-foreground">
+                      {Math.round((getProgress('morning') + getProgress('day') + getProgress('evening')) / 3)}%
+                    </div>
+                  </div>
+                  <Icon name="Sparkles" size={32} className="text-secondary-foreground" />
+                </div>
+              </CardContent>
+            </Card>
           </div>
         </div>
       </section>
