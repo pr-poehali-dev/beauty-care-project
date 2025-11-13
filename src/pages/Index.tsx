@@ -64,26 +64,72 @@ const Index = () => {
     }
   ];
 
-  const nutrition = [
+  const mealPlan = [
     {
-      category: 'Белки',
-      items: ['Куриная грудка', 'Рыба (лосось, треска)', 'Яйца', 'Греческий йогурт', 'Творог'],
-      icon: 'Beef'
+      meal: 'Завтрак',
+      time: '8:00 - 9:00',
+      icon: 'Coffee',
+      examples: [
+        {
+          name: 'Овсянка с ягодами',
+          ingredients: 'Овсяные хлопья 50г, греческий йогурт, ягоды, мёд',
+          calories: '320 ккал'
+        },
+        {
+          name: 'Омлет с авокадо',
+          ingredients: '2 яйца, авокадо, помидоры черри, цельнозерновой тост',
+          calories: '380 ккал'
+        },
+        {
+          name: 'Смузи-боул',
+          ingredients: 'Банан, ягоды, протеин, гранола, семена чиа',
+          calories: '350 ккал'
+        }
+      ]
     },
     {
-      category: 'Сложные углеводы',
-      items: ['Овсянка', 'Киноа', 'Бурый рис', 'Цельнозерновой хлеб', 'Батат'],
-      icon: 'Wheat'
+      meal: 'Обед',
+      time: '13:00 - 14:00',
+      icon: 'UtensilsCrossed',
+      examples: [
+        {
+          name: 'Куриная грудка с киноа',
+          ingredients: 'Куриная грудка 150г, киноа 80г, салат из овощей',
+          calories: '450 ккал'
+        },
+        {
+          name: 'Запечённый лосось',
+          ingredients: 'Лосось 150г, бурый рис, брокколи на пару',
+          calories: '480 ккал'
+        },
+        {
+          name: 'Боул с тофу',
+          ingredients: 'Тофу 120г, батат, шпинат, авокадо, кунжут',
+          calories: '420 ккал'
+        }
+      ]
     },
     {
-      category: 'Полезные жиры',
-      items: ['Авокадо', 'Орехи (миндаль, грецкие)', 'Оливковое масло', 'Семена чиа', 'Жирная рыба'],
-      icon: 'Apple'
-    },
-    {
-      category: 'Клетчатка',
-      items: ['Брокколи', 'Шпинат', 'Ягоды', 'Яблоки', 'Чечевица'],
-      icon: 'Leaf'
+      meal: 'Ужин',
+      time: '18:00 - 19:00',
+      icon: 'Moon',
+      examples: [
+        {
+          name: 'Запечённая треска',
+          ingredients: 'Треска 150г, овощи гриль, салат с оливковым маслом',
+          calories: '380 ккал'
+        },
+        {
+          name: 'Индейка с овощами',
+          ingredients: 'Индейка 150г, цветная капуста, морковь, зелень',
+          calories: '360 ккал'
+        },
+        {
+          name: 'Творожная запеканка',
+          ingredients: 'Творог 150г, яйцо, ягоды, мёд',
+          calories: '320 ккал'
+        }
+      ]
     }
   ];
 
@@ -219,25 +265,67 @@ const Index = () => {
             <Icon name="Salad" size={36} className="text-primary-foreground" />
             <h3 className="text-4xl font-bold text-primary-foreground">Питание для стройности</h3>
           </div>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {nutrition.map((group, idx) => (
-              <Card key={idx} className="animate-fade-in border-none shadow-lg hover:shadow-xl transition-all" style={{ animationDelay: `${idx * 0.1}s` }}>
-                <CardContent className="p-6">
-                  <div className="bg-primary/10 p-3 rounded-xl w-fit mb-4">
-                    <Icon name={group.icon} size={28} className="text-primary-foreground" />
-                  </div>
-                  <h4 className="text-xl font-semibold mb-4 text-primary-foreground">{group.category}</h4>
-                  <ul className="space-y-2">
-                    {group.items.map((item, iIdx) => (
-                      <li key={iIdx} className="flex items-center gap-2">
-                        <span className="w-1.5 h-1.5 bg-primary rounded-full"></span>
-                        <span className="text-sm text-foreground/80">{item}</span>
-                      </li>
-                    ))}
-                  </ul>
-                </CardContent>
-              </Card>
+          <p className="text-xl text-muted-foreground text-center mb-12">
+            Трёхразовое сбалансированное питание с примерами блюд
+          </p>
+          <div className="grid md:grid-cols-3 gap-8">
+            {mealPlan.map((meal, idx) => (
+              <div key={idx} className="animate-fade-in" style={{ animationDelay: `${idx * 0.15}s` }}>
+                <Card className="border-none shadow-lg mb-6">
+                  <CardContent className="p-6">
+                    <div className="flex items-center gap-3 mb-2">
+                      <div className="bg-primary/10 p-2 rounded-lg">
+                        <Icon name={meal.icon} size={24} className="text-primary-foreground" />
+                      </div>
+                      <div>
+                        <h4 className="text-2xl font-bold text-primary-foreground">{meal.meal}</h4>
+                        <p className="text-sm text-muted-foreground">{meal.time}</p>
+                      </div>
+                    </div>
+                  </CardContent>
+                </Card>
+                <div className="space-y-4">
+                  {meal.examples.map((example, eIdx) => (
+                    <Card key={eIdx} className="border-none shadow-md hover:shadow-lg transition-all hover:scale-102">
+                      <CardContent className="p-5">
+                        <h5 className="text-lg font-semibold mb-2 text-foreground">{example.name}</h5>
+                        <p className="text-sm text-muted-foreground mb-3">{example.ingredients}</p>
+                        <div className="flex items-center gap-2">
+                          <Icon name="Flame" size={16} className="text-primary-foreground" />
+                          <span className="text-sm font-medium text-primary-foreground">{example.calories}</span>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
             ))}
+          </div>
+          <div className="mt-12 p-6 bg-primary/10 rounded-2xl">
+            <div className="flex items-start gap-4">
+              <Icon name="Info" size={24} className="text-primary-foreground flex-shrink-0 mt-1" />
+              <div>
+                <h5 className="text-lg font-semibold mb-2 text-primary-foreground">Советы по питанию</h5>
+                <ul className="space-y-2 text-foreground/80">
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary-foreground">•</span>
+                    <span>Пейте 1.5-2 литра воды в день</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary-foreground">•</span>
+                    <span>Перерыв между приёмами пищи 4-5 часов</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary-foreground">•</span>
+                    <span>Последний приём пищи за 3 часа до сна</span>
+                  </li>
+                  <li className="flex items-start gap-2">
+                    <span className="text-primary-foreground">•</span>
+                    <span>Добавьте полезные перекусы: орехи, фрукты, кефир</span>
+                  </li>
+                </ul>
+              </div>
+            </div>
           </div>
         </div>
       </section>
